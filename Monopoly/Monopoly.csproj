@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BoardGame.cs" />
     <Compile Include="Box.cs" />
+    <Compile Include="Card.cs" />
     <Compile Include="Dice.cs" />
     <Compile Include="Pawn.cs" />
     <Compile Include="Player.cs" />
