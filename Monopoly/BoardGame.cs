@@ -8,8 +8,27 @@ namespace Monopoly
 {
     class BoardGame
     {
-        private static readonly int SIZE = 40;
-        private List<box> squares = new List<box>(SIZE);
+        private readonly int size = 40;
+        private List<Box> squares = new List<Box>(40);
+
+        public BoardGame(int size, List<Box> squares)
+        {
+            this.size = size;
+            this.squares = squares;
+        }
+
+        public int Size
+        {
+            get { return size; }
+            
+        }
+
+        public List<Box> Squares
+        {
+            get { return squares; }
+            set { squares = value; }
+        }
+
 
         public BoardGame()
         {
@@ -18,7 +37,7 @@ namespace Monopoly
 
         private void buildSquares()
         {
-            for (int i = 1; i <= SIZE; i++)
+            for (int i = 1; i <= size; i++)
             {
                 build(i);
             }
@@ -26,8 +45,8 @@ namespace Monopoly
 
         private void build(int i)
         {
-            Box s = new Box("Square " + i, i - 1);
-            squares.add(s);
+            //Box s = new Box("Square " + i, i - 1);
+            //squares.add(s);
         }
 
     }
