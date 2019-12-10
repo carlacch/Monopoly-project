@@ -6,14 +6,29 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-    class Dice
+    public class Dice
     {
-        int dice_value;
 
-        static void RollDice()
-        {
-         
-        }
+        int dice_value; // between 1 and 6
+
+            public Dice(int dice_value)
+            {
+                this.dice_value = dice_value;
+            }
+
+            public int Dice_value
+            {
+                get { return dice_value; }
+                set { dice_value = value; }
+            }
+            
+     
+
+
+        
+       
+
+        
     }
 
 
