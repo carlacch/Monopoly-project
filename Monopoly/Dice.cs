@@ -8,26 +8,24 @@ namespace Monopoly
 {
     public class Dice
     {
-
         int dice_value; // between 1 and 6
 
-            public Dice(int dice_value)
-            {
-                this.dice_value = dice_value;
-            }
+        public Dice()
+        {
+            this.dice_value = 0;
+        }
 
-            public int Dice_value
-            {
-                get { return dice_value; }
-                set { dice_value = value; }
-            }
+        public int Dice_value
+        {
+            get { return dice_value; }
+            set { dice_value = value; }
+        }
             
-     
-
-
-        
-       
-
+        public void Rolldice()
+        {
+            Random rdm = new Random();
+            this.dice_value = rdm.Next(1,6);
+        }
         
     }
 
