@@ -8,19 +8,19 @@ namespace Monopoly
 {
     class Card
     {
-        String card_name;
-        String description;
+        protected int id_card;
+        protected String description;
 
-        public Card(string card_name, string description)
+        public Card(int id_card, string description)
         {
-            this.card_name = card_name;
+            this.id_card = id_card;
             this.description = description;
         }
 
-        public string Name
+        public int Id_card
         {
-            get { return card_name; }
-            set { card_name = value; }
+            get { return id_card; }
+            set { id_card = value; }
         }
 
         public string Description

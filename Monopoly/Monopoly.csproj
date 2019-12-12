@@ -8,10 +8,11 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Monopoly</RootNamespace>
     <AssemblyName>Monopoly</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,6 +47,8 @@
     <Compile Include="BoardGame.cs" />
     <Compile Include="Box.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="Chance.cs" />
+    <Compile Include="Community.cs" />
     <Compile Include="Dice.cs" />
     <Compile Include="Pawn.cs" />
     <Compile Include="Player.cs" />
