@@ -8,8 +8,11 @@ namespace Monopoly
 {
     public class Player
     {
+        /*
         protected bool banker = false; // if it's a banker he gives the money at the beginning
         protected bool prisoner = false; //prisoner or not
+        */
+        protected IStatePlayer state;
         protected int playing_order; // ordre dans lequel ils commencent à jouer
         protected int cash; // amount of money earned
         protected Pawn hispawn;
@@ -17,12 +20,9 @@ namespace Monopoly
         protected Tuple<Dice, Dice> twoDice; // Dice used by the player
         protected List<Tuple<Dice, Dice>> previewsdice; //List of maximum 3 tuple of dice
       
-        public Player(int playing_order, int cash, Tuple<Dice, Dice> twoDice)
+        public Player(int playing_order, int cash, Tuple<Dice, Dice> twoDice) : this(cash,twoDice)
         {
             this.playing_order = playing_order;
-            this.cash = cash;
-            this.twoDice = twoDice;
-            this.properties = null;
         }
 
         public Player(int cash, Tuple<Dice, Dice> twoDice)
@@ -30,14 +30,12 @@ namespace Monopoly
             this.cash = cash;
             this.twoDice = twoDice;
             this.properties = null;
+            this.state = new Free();
         }
 
-        public Player(int cash, Tuple<Dice, Dice> twoDice, Pawn pawn)
+        public Player(int cash, Tuple<Dice, Dice> twoDice, Pawn pawn) : this(cash,twoDice)
         {
-            this.cash = cash;
-            this.twoDice = twoDice;
             this.hispawn = pawn;
-            this.properties = null;
         }
 
         public Pawn Hispawn
@@ -46,6 +44,7 @@ namespace Monopoly
             set { hispawn = value; }
         }
 
+        /*
         public bool Banker
         {
             get { return banker; }
@@ -57,7 +56,14 @@ namespace Monopoly
             get { return prisoner; }
             set { prisoner = value; }
         }
-        
+        */
+
+        public IStatePlayer State
+        {
+            get { return state; }
+            set { state = value; }
+        }
+
         public int Playing_Order
         {
             get { return playing_order; }
@@ -86,6 +92,11 @@ namespace Monopoly
         {
             get { return previewsdice; }
             set { previewsdice = value; }
+        }
+
+        public void Action()
+        {
+            state.Action(this);
         }
 
         public int SumDice()
@@ -117,7 +128,8 @@ namespace Monopoly
         {
             if (previewsdice.Count >= 3) //If the player made 3 doubles consecutifs
             {
-                prisoner = true;
+                state = new Prisoner();
+                Action();
                 return true;
             }
             return false;
