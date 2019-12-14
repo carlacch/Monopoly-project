@@ -8,18 +8,10 @@ namespace Monopoly
 {
     class BoardGame
     {
-        private static BoardGame instance;
+        private static BoardGame instance = new BoardGame();
         private static readonly int size = 40;
         private List<Box> squares = new List<Box>(40);
 
-        /*
-        public BoardGame(int size, List<Box> squares)
-        {
-            this.size = size;
-            this.squares = squares;
-        }*/
-
-        /*n'est pas utile pour le jeu, la taille se récupèrer seulement dans cette classe*/
         public int Size
         {
             get { return size; }
@@ -31,8 +23,12 @@ namespace Monopoly
             set { squares = value; }
         }
 
+        public static BoardGame GetInstance()
+        {
+            return instance;
+        }
 
-        public BoardGame()
+        private BoardGame()
         {
             buildSquares();
         }
@@ -47,6 +43,7 @@ namespace Monopoly
 
         private void build(int i)
         {
+            //FAIRE CREATION DES CASES AVEC FACTORY 
             //Box s = new Box("Box " + i, i - 1);
             //squares.add(s);
         }
