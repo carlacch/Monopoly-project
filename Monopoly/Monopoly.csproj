@@ -48,14 +48,24 @@
     <Compile Include="Box.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="Chance.cs" />
+    <Compile Include="chanceBox.cs" />
     <Compile Include="Community.cs" />
+    <Compile Include="communityBox.cs" />
     <Compile Include="Dice.cs" />
+    <Compile Include="FinalBoardGame.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GoBox.cs" />
+    <Compile Include="goToJailBox.cs" />
+    <Compile Include="jailBox.cs" />
+    <Compile Include="parkingBox.cs" />
     <Compile Include="Pawn.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Property.cs" />
+    <Compile Include="stationBox.cs" />
+    <Compile Include="streetBox.cs" />
+    <Compile Include="taxBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

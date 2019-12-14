@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-    class BoardGame
+    abstract class BoardGame
     {
         private static BoardGame instance = new BoardGame();
         private static readonly int size = 40;
@@ -28,10 +28,6 @@ namespace Monopoly
             return instance;
         }
 
-        private BoardGame()
-        {
-            buildSquares();
-        }
 
         private void buildSquares()
         {
@@ -40,6 +36,23 @@ namespace Monopoly
                 build(i);
             }
         }
+
+        private List<Box> boxes = new List<Box>();
+
+        public BoardGame()
+        {
+            CreateBoxes();
+        }
+
+        //Factory Method
+        public abstract void CreateBoxes();
+
+
+        public List<Box> Boxes
+        {
+            get { return boxes; }
+        } // end factory method
+
 
         private void build(int i)
         {

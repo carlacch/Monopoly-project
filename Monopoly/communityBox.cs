@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-    class Program
+    class communityBox : Box
     {
-        
-        static void Main(string[] args)
-        {
-            var boardgame = new FinalBoardGame();
-        }
     }
 }

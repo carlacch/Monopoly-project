@@ -9,28 +9,30 @@ namespace Monopoly
    
     enum Type
     {
-        go,
-        station,
-        parking,
-        chance,
-        community,
-        tax,
-        jail,
-        go_to_jail,
+        go,//  1
+        station, //4
+        parking, // 12
+        chance, // 5
+        street, // 6
+        community, // 5
+        tax, // 5
+        jail, //1
+        go_to_jail, //1
+
     }
 
     class Box
     {
-        Type box_name;
-        int box_value; // for parking, station and tax not null, null for all others
+        public string box_name;
+        public int box_value; // for parking, station and tax not null, null for all others
 
-        public Box(Type box_name, int box_value)
+        public Box(string box_name, int box_value)
         {
             this.box_name = box_name;
             this.box_value = box_value;
 
         }
-        public Type Box_name
+        public string Box_name
         {
             get { return box_name; }
             set { box_name = value; }
