@@ -20,9 +20,8 @@ namespace Monopoly
             set { this.box_value = value; }
         }
 
-        public GoToJailBox(string box_name, int box_value) : base(box_name, box_value)
+        public GoToJailBox() : base("Go To Jail", 0)
         {
-
         }
 
     }

@@ -20,7 +20,7 @@ namespace Monopoly
             set { this.box_value = value; }
         }
 
-        public ParkingBox(string box_name, int box_value) : base(box_name, box_value)
+        public ParkingBox() : base("Parking", 0)
         {
 
         }

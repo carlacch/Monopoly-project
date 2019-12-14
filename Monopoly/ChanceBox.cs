@@ -20,7 +20,7 @@ namespace Monopoly
             set { base.box_value = value; }
         }
 
-        public ChanceBox(string box_name, int box_value) : base(box_name, box_value) 
+        public ChanceBox() : base("Chance", 0) 
         {
         }
     }

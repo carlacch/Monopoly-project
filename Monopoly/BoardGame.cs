@@ -30,22 +30,8 @@ namespace Monopoly
 
         private BoardGame()
         {
-            buildSquares();
-        }
-
-        private void buildSquares()
-        {
-            for (int i = 1; i <= size; i++)
-            {
-                build(i);
-            }
-        }
-
-        private void build(int i)
-        {
-            //FAIRE CREATION DES CASES AVEC FACTORY 
-            //Box s = new Box("Box " + i, i - 1);
-            //squares.add(s);
+            var listBoxes = new ListBox();
+            squares = listBoxes.Boxes;
         }
 
     }

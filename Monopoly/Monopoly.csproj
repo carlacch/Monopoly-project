@@ -56,6 +56,8 @@
     <Compile Include="GoBox.cs" />
     <Compile Include="GoToJailBox.cs" />
     <Compile Include="JailBox.cs" />
+    <Compile Include="ListBox.cs" />
+    <Compile Include="ListBoxFactory.cs" />
     <Compile Include="ParkingBox.cs" />
     <Compile Include="Pawn.cs" />
     <Compile Include="Player.cs" />
