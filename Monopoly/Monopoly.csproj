@@ -50,6 +50,7 @@
     <Compile Include="Chance.cs" />
     <Compile Include="Community.cs" />
     <Compile Include="Dice.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Pawn.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
