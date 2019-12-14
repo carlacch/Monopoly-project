@@ -34,5 +34,25 @@ namespace Monopoly
             squares = listBoxes.Boxes;
         }
 
+        public void DispayBoard()
+        {
+            Console.WriteLine();
+            for (int i=0; i <= 10; i++)
+            { 
+                Console.Write("| {0} ", squares[i].Box_name);
+            }
+            Console.WriteLine("\n-----------------------------------------------------------------------------------------");
+            for (int i = 0; i <= 8; i++)
+            {
+                Console.WriteLine("| {0} \t|\t\t\t\t\t\t\t\t\t\t | {1} \t|", squares[39-i].Box_name, squares[11+i].Box_name);
+            }
+            Console.WriteLine("\n-----------------------------------------------------------------------------------------");
+            for (int i = 30; i >= 20; i--)
+            {
+                Console.Write("| {0} ", squares[i].Box_name);
+            }
+            Console.WriteLine();
+        }
+
     }
 }

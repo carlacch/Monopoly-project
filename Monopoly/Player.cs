@@ -99,6 +99,11 @@ namespace Monopoly
             state.Action(this);
         }
 
+        public bool IsPrisoner()
+        {
+            return state.IsPrisoner(this);
+        }
+
         public int SumDice()
         {
             int sum = this.twoDice.Item1.Dice_value + this.twoDice.Item2.Dice_value;
@@ -116,9 +121,10 @@ namespace Monopoly
 
         public bool Replay()
         {
-            if (DoubleDice()) 
+            if (DoubleDice() && previewsdice.Count < 3 &&!IsPrisoner()) //a vérifier
             {
                 this.previewsdice.Add(this.twoDice);
+                Console.WriteLine("You can play again !");
                 return true;
             }
             return false;
@@ -185,6 +191,23 @@ namespace Monopoly
         {
             twoDice.Item1.Rolldice();
             twoDice.Item2.Rolldice();
+        }
+
+        public void DisplayDiceValue()
+        {
+            Console.WriteLine("You rolled <{0}> and <{1}> ! \nTotal of {2} ", twoDice.Item1.Dice_value, twoDice.Item2.Dice_value, SumDice());
+        }
+
+        public void Move()
+        {
+            if (IsPrisoner())
+            {
+                Console.WriteLine("You can't move, you are in jail");
+            }
+            else
+            {
+                hispawn.Position = (hispawn.Position + SumDice() )% 40;
+            }
         }
     }
 }

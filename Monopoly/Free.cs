@@ -10,7 +10,7 @@ namespace Monopoly
     {
         public void Action(Player context)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("You are now free and can move again ! ");
         }
 
         public bool IsPrisoner(Player context)

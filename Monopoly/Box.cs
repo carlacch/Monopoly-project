@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-   
+   /*
     enum Type
     {
         go, //1
@@ -18,7 +18,7 @@ namespace Monopoly
         tax, //4
         jail, //1
         go_to_jail, //1
-    }
+    }*/
 
     abstract class Box //Factory pattern
     {
