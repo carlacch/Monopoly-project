@@ -20,9 +20,14 @@ namespace Monopoly
             set { this.box_value = value; }
         }
 
-        public ParkingBox() : base("Parking", 0)
+        public new Player Owner
         {
+            get { return owner; }
+            set { owner = value; }
+        }
 
+        public ParkingBox() : base("Parking", -20)
+        {
         }
     }
 }

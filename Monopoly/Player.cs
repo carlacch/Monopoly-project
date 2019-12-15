@@ -9,14 +9,13 @@ namespace Monopoly
     public class Player
     {
         /*
-        protected bool banker = false; // if it's a banker he gives the money at the beginning
         protected bool prisoner = false; //prisoner or not
         */
         protected IStatePlayer state;
         protected int playing_order; // ordre dans lequel ils commencent à jouer
         protected int cash; // amount of money earned
         protected Pawn hispawn;
-        protected List<Property> properties; // properties earned 
+        //protected List<Property> properties; // properties earned 
         protected Dice twoDice; // Dice used by the player
         protected List<Dice> previewsdice; //List of maximum 3 twodice
       
@@ -29,7 +28,7 @@ namespace Monopoly
         {
             this.cash = cash;
             this.twoDice = twoDice;
-            this.properties = new List<Property>();
+            //this.properties = new List<Property>();
             this.state = new Free();
             this.previewsdice = new List<Dice>();
         }
@@ -76,13 +75,13 @@ namespace Monopoly
             get { return cash; }
             set { cash = value; }
         }
-
+        /*
         public List<Property> Properties
         {
             get { return properties; }
             set { properties  = value; }
         }
-
+        */
         public Dice TwoDice
         {
             get { return twoDice; }
@@ -176,7 +175,7 @@ namespace Monopoly
                 {
                     col = Convert.ToInt32(Console.ReadLine());
                 }
-                catch (FormatException e) 
+                catch (FormatException) 
                 { }
                 if ( col >= nb || col < 0)
                     {
@@ -209,6 +208,51 @@ namespace Monopoly
             {
                 hispawn.Position = (hispawn.Position + SumDice() )% 40;
             }
+        }
+
+        public void BuyLand(Box land)
+        {
+            Console.WriteLine("Do you want to buy this {0} ? It costs {1}$", land.Box_name, Math.Abs(land.Box_value));
+            Console.WriteLine("\n1/ YES \n2/ NO");
+            int input = int.Parse(Console.ReadLine());
+            switch (input)
+            {
+                case 1:
+                    if (cash >= Math.Abs(land.Box_value))
+                    {
+                        cash += land.Box_value;
+                        land.Owner = this;
+                        Console.WriteLine(" This {0} has been added to your proprieties", land.Box_name);
+                    }
+                    else
+                    {
+                        Console.WriteLine("You can't buy this property.");
+                    }
+                    break;
+                case 2:
+                    Console.WriteLine("You chose to not buy this property");
+                    break;
+                default:
+                    Console.WriteLine("\ninvalid choice => choose again....");
+                    break;
+            }
+        }
+
+        public void NoMoreCash()
+        {
+            this.cash = 0;
+            Console.WriteLine("\nYou don't have any money left....\n\tYou lost");
+        }
+
+        public void PayingOwner(Box land)
+        {
+            Console.WriteLine("You are on the land of {0}... You need to pay him {1}$", land.Owner.Hispawn.Color, Math.Abs(land.Box_value));
+            if (this.cash <= Math.Abs(land.Box_value))
+            {
+                NoMoreCash();
+            }
+            else { this.cash += land.Box_value; }
+            land.Owner.Cash += Math.Abs(land.Box_value);
         }
     }
 }

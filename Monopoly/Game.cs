@@ -18,7 +18,7 @@ namespace Monopoly
             board = BoardGame.GetInstance();
             players = new List<Player>();
             cards = new List<Card>();
-            String[] colorlist = {"Red","Yellow","Green","Blue","Black","White","Purple" };
+            String[] colorlist = { "Red", "Yellow", "Green", "Blue", "Black", "White", "Purple" };
             pawnavailable = new List<String>(colorlist);
         }
 
@@ -30,7 +30,7 @@ namespace Monopoly
         public void PlayingOrder(List<int> Sums)
         {
             int nb = Sums.Count();
-            for (int i = 0; i < nb-1; i++)
+            for (int i = 0; i < nb - 1; i++)
             {
                 if (Sums[i] < Sums[i + 1])
                 {
@@ -53,7 +53,7 @@ namespace Monopoly
                 {
                     nbplayers = Convert.ToInt32(Console.ReadLine());
                 }
-                catch(FormatException) { }
+                catch (FormatException) { }
                 if (nbplayers <= 0 || nbplayers > 4)
                 {
                     valid = false;
@@ -71,15 +71,15 @@ namespace Monopoly
             PlayingOrder(Sums);
             foreach (Player player in players)
             {
-                Console.WriteLine("The player " + player.Hispawn.Color + " is the player " + (players.IndexOf(player) + 1) );
+                Console.WriteLine("The player " + player.Hispawn.Color + " is the player " + (players.IndexOf(player) + 1));
             }
         }
 
         public void OnePlayer(List<int> Sums)
         {
             //Each player starts with 1500$
-            players.Add(new Player(1500, new Dice()) );
-            players.Add( new Player(1500, new Dice() , new Pawn("Grey")) ); //This player is the computer
+            players.Add(new Player(1500, new Dice()));
+            players.Add(new Player(1500, new Dice(), new Pawn("Grey"))); //This player is the computer
             int pawnused = players[0].ChoosePawn(pawnavailable);
             pawnavailable.RemoveAt(pawnused);
             foreach (Player player in players)
@@ -126,11 +126,11 @@ namespace Monopoly
                         Console.WriteLine();
                         p.RollDice();
                         p.DisplayDiceValue();
-                        p.GoToJail(); 
+                        p.GoToJail();
                         p.Move();
                         Console.WriteLine(">> You are on {0}", board.Squares[p.Hispawn.Position].Box_name);
                         board.DispayBoard();
-                    } while ( !p.EndTurn() );
+                    } while (!p.EndTurn());
                 }
                 else
                 {
@@ -161,5 +161,105 @@ namespace Monopoly
             return end;
         }
 
+        public void ActionPlayer(Player player)
+        {
+            int position = player.Hispawn.Position;
+            Box box = board.Squares[position];
+            if (box.Box_name == "Go")  // in case jail
+            {
+                player.Cash += box.Box_value;
+                Console.WriteLine("You earned {0}$ because you're starting the game or going through the go case :)", box.Box_value);
+            }
+            else if (box.Box_name == "Tax")
+            {
+                Console.WriteLine("You lose {0}$ because of a tax :( ", Math.Abs(box.Box_value));
+                if (player.Cash > Math.Abs(box.Box_value))
+                {
+                    player.Cash += box.Box_value;
+                    
+                }
+                else
+                {
+                    player.NoMoreCash();
+                }
+            }
+
+            else if (box.Box_name == "Station")
+            {
+                if (box.Owner == null)
+                {
+                    player.BuyLand(box);
+                }
+                else
+                {
+                    if (box.Owner != player)
+                    {
+                        player.PayingOwner(box);
+                    }
+                    else { Console.WriteLine("This is your propriety !"); }
+                }
+            }
+            else if (box.Box_name == "Parking")
+            {
+                if (box.Owner == null)
+                {
+                    player.BuyLand(box);
+                }
+                else
+                {
+                    if (box.Owner != player)
+                    {
+                        player.PayingOwner(box);
+                    }
+                    else { Console.WriteLine("This is your propriety !"); }
+                }
+            }
+            else if (box.Box_name.Contains("Street"))
+            {
+                if (box.Owner == null)
+                {
+                    player.BuyLand(box);
+                }
+                else
+                {
+                    if (box.Owner != player)
+                    {
+                        player.PayingOwner(box);
+                    }
+                    else { Console.WriteLine("This is your propriety !"); }
+                }
+            }
+            else if (box.Box_name == "Jail")
+            {
+                Console.WriteLine("You're on the jail case");
+                if (player.IsPrisoner())
+                {
+                    Console.WriteLine("You're behind bars..");
+                }
+                else
+                {
+                    Console.WriteLine("You're visiting a friend");
+                }
+            }
+
+            else if (box.Box_name == "Go To Jail")
+            {
+                player.GoToJail();
+                Console.WriteLine("You skip the next 3 turns");                
+            }
+
+            else if (box.Box_name == "Community")
+            {
+                Console.WriteLine("Pick one community card");
+                /// to do
+            }
+
+            else if (box.Box_name == "Chance")
+            {
+                Console.WriteLine("Pick one chance card");
+                /// to do
+            }                  
+
+        }
     }
 }

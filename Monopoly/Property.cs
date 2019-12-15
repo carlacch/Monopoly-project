@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-    public class Property
+    public class Property //Can be deleted
     {
         string name;
         int property_value;

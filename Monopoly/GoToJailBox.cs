@@ -22,6 +22,7 @@ namespace Monopoly
 
         public GoToJailBox() : base("Go To Jail", 0)
         {
+            this.owner = null; //Cannot be owned
         }
 
     }

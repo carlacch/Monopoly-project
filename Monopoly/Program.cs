@@ -11,6 +11,7 @@ namespace Monopoly
         static void Main(string[] args)
         {
             Game MonopolyGame = new Game();
+            Console.WriteLine("\t=== YOU ARE PLAYING MONOPOLY ===");
             MonopolyGame.Board.DispayBoard();
             MonopolyGame.Initialization();
             int turn = 0;

@@ -22,6 +22,7 @@ namespace Monopoly
 
         public ChanceBox() : base("Chance", 0) 
         {
+            this.owner = null; //Cannot be owned
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Monopoly
 
         public CommunityBox() : base("Community", 0)
         {
+            this.owner = null; //Cannot be owned
         }
     }
 }

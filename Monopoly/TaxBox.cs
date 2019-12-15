@@ -25,6 +25,7 @@ namespace Monopoly
 
         public TaxBox() : base("Tax", -40)
         {
+            this.owner = null; //Cannot be owned
         }
     }
 }

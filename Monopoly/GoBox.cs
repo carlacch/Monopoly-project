@@ -25,6 +25,7 @@ namespace Monopoly
 
         public GoBox() : base("Go", 200)
         {
+            this.owner = null; //Cannot be owned
         }
 
     }
