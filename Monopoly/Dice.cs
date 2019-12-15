@@ -8,23 +8,32 @@ namespace Monopoly
 {
     public class Dice
     {
-        int dice_value; // between 1 and 6
+        int die1; // between 1 and 6
+        int die2;
 
         public Dice()
         {
-            this.dice_value = 0;
+            this.die1 = 0;
+            this.die2 = 0;
         }
 
-        public int Dice_value
+        public int Die1
         {
-            get { return dice_value; }
-            set { dice_value = value; }
+            get { return die1; }
+            set { die1 = value; }
         }
-            
+
+        public int Die2
+        {
+            get { return die2; }
+            set { die2 = value; }
+        }
+
         public void Rolldice()
         {
             Random rdm = new Random();
-            this.dice_value = rdm.Next(1,6);
+            this.die1 = rdm.Next(1, 6 + 1);
+            this.die2 = rdm.Next(1, 6 + 1);
         }
         
     }
