@@ -135,7 +135,7 @@ namespace Monopoly
 
         public void PickCardChance()
         {
-            if
+            Chance topOfStack = stack_chance.Pop();
             Console.WriteLine("Here is the card you picked : " + Chance.description);
         }
 
