@@ -8,5 +8,7 @@ namespace Monopoly
 {
     class chanceBox : Box
     {
+        string 
+
     }
 }

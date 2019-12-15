@@ -15,8 +15,8 @@ namespace Monopoly
         protected Pawn hispawn;
         protected List<Property> properties; // properties earned 
         protected Tuple<Dice, Dice> twoDice; // Dice used by the player
-        protected List<Tuple<Dice, Dice>> previewsdice; //List of maximum 3 tuple of dice
-      
+        protected List<Tuple<Dice, Dice>> previewsdice; //List of maximum 3 tuples of dice
+
         public Player(int playing_order, int cash, Tuple<Dice, Dice> twoDice)
         {
             this.playing_order = playing_order;
@@ -57,7 +57,7 @@ namespace Monopoly
             get { return prisoner; }
             set { prisoner = value; }
         }
-        
+
         public int Playing_Order
         {
             get { return playing_order; }
@@ -73,15 +73,15 @@ namespace Monopoly
         public List<Property> Properties
         {
             get { return properties; }
-            set { properties  = value; }
+            set { properties = value; }
         }
 
-        public Tuple<Dice,Dice> TwoDice
+        public Tuple<Dice, Dice> TwoDice
         {
             get { return twoDice; }
             set { twoDice = value; }
         }
-        
+
         public List<Tuple<Dice, Dice>> Previewsdice
         {
             get { return previewsdice; }
@@ -94,7 +94,7 @@ namespace Monopoly
             return sum;
         }
 
-        public bool DoubleDice()
+        public bool DoubleDice() // if true the player plays again
         {
             if (this.twoDice.Item1.Dice_value == this.twoDice.Item2.Dice_value)
             {
@@ -105,7 +105,7 @@ namespace Monopoly
 
         public bool Replay()
         {
-            if (DoubleDice()) 
+            if (DoubleDice())
             {
                 this.previewsdice.Add(this.twoDice);
                 return true;
@@ -115,7 +115,7 @@ namespace Monopoly
 
         public bool GoToJail()
         {
-            if (previewsdice.Count >= 3) //If the player made 3 doubles consecutifs
+            if (previewsdice.Count >= 3) //If the player made 3 doubles in a row
             {
                 prisoner = true;
                 return true;
@@ -133,10 +133,13 @@ namespace Monopoly
             return false;
         }
 
-        public void PickCard()
+        public void PickCardChance()
         {
-            Console.WriteLine("Here is the card you picked : ");
+            if
+            Console.WriteLine("Here is the card you picked : " + Chance.description);
         }
+
+
 
         public int ChoosePawn(List<String> colorList)
         {
@@ -157,13 +160,13 @@ namespace Monopoly
                 {
                     col = Convert.ToInt32(Console.ReadLine());
                 }
-                catch (FormatException e) 
+                catch (FormatException e)
                 { }
-                if ( col >= nb || col < 0)
-                    {
-                        Console.WriteLine("your choice <" + col + "> isn't available => try again ");
-                        valid = false;
-                    }
+                if (col >= nb || col < 0)
+                {
+                    Console.WriteLine("your choice <" + col + "> isn't available => try again ");
+                    valid = false;
+                }
             } while (!valid);
             this.hispawn = new Pawn(colorList[col]);
             return col;
@@ -174,5 +177,129 @@ namespace Monopoly
             twoDice.Item1.Rolldice();
             twoDice.Item2.Rolldice();
         }
+
+        public override string ActionPlayer(Player player)
+        {
+            for (int i = 1; i < 40; i++)
+            {
+                if (squares[i].box_name == "go")  // in case jail
+                {
+                    player.Cash += 200;
+                    Console.WriteLine("You earned 200$ because you're starting the game or going through the go case :)");
+                }
+                else if (squares[i].box_name == "tax")
+                {
+                    player.Cash -= 40;
+                    Console.WriteLine("You lose 40$ because of a tax :( ");
+                }
+
+                else if (squares[i].box_name == "station")
+                {
+                    Console.WriteLine("Do you want to buy this station ? It costs 100$");
+                    Console.WriteLine("\n1/ YES \n2/ NO");
+                    int k = int.Parse(Console.ReadLine());
+                    switch (k)
+                    {
+                        case 1:
+                            if (player.Cash >= 100)
+                            {
+                                player.Cash -= 100;
+                                player.properties.Add("station", 200);
+                                Console.WriteLine(" This station has been added to your proprieties");
+                            }
+                            else
+                            {
+                                Console.WriteLine("You can't buy this property.");
+
+                            }
+                            break;
+
+                        case 2:
+                            Console.WriteLine("You chose to not buy this property");
+                            break;
+                    }
+
+                }
+                else if (squares[i].box_name == "parking")
+                {
+                    Console.WriteLine("Do you want to buy this parking ? It costs 20$");
+                    Console.WriteLine("\n1/ YES \n2/ NO");
+                    int l = int.Parse(Console.ReadLine());
+                    switch (l)
+                    {
+                        case 1:
+                            if (player.Cash >= 20)
+                            {
+                                player.Cash -= 20;
+                                player.properties.Add("parking", 20);
+                                Console.WriteLine(" This parking has been added to your proprieties");
+                            }
+                            else
+                            {
+                                Console.WriteLine("You can't buy this property.");
+
+                            }
+                            break;
+
+                        case 2:
+                            Console.WriteLine("You chose to not buy this property");
+                            break;
+                    }
+
+                }
+                else if (squares[i].box_name == "street")
+                {
+                    Console.WriteLine("Do you want to buy this parking ? It costs 150$");
+                    Console.WriteLine("\n1/ YES \n2/ NO");
+                    int m = int.Parse(Console.ReadLine());
+                    switch (m)
+                    {
+                        case 1:
+                            if (player.Cash >= 150)
+                            {
+                                player.Cash -= 150;
+                                player.properties.Add("street", 150);
+                                Console.WriteLine(" This street has been added to your proprieties");
+                            }
+                            else
+                            {
+                                Console.WriteLine("You can't buy this property.");
+
+                            }
+                            break;
+
+                        case 2:
+                            Console.WriteLine("You chose to not buy this property");
+                            break;
+                    }
+                }
+                else if (squares[i].box_name == "jail")
+                {
+                    Console.WriteLine("You're on the jail case, nothing happens");
+                }
+
+                else if (squares[i].box_name == "go_to_jail")
+                {
+                    Console.WriteLine("You're in jail ! You skip the new 3 turns");
+                    prisoner = true;
+                }
+
+                else if (squares[i].box_name == "community")
+                {
+                    Console.WriteLine("Pick one community card");
+                    /// to do
+                }
+
+                else if (squares[i].box_name == "chance")
+                {
+                    Console.WriteLine("Pick one chance card");
+                    /// to do
+                }
+
+
+
+            }
+        }
     }
+
 }

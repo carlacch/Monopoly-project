@@ -12,6 +12,7 @@ namespace Monopoly
         List<Card> cards;
         List<Player> players;
         List<String> pawnavailable;
+        
 
         public Game()
         {

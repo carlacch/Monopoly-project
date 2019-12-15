@@ -9,7 +9,7 @@ namespace Monopoly
     class Card
     {
         protected int id_card;
-        protected String description;
+        public String description;
 
         public Card(int id_card, string description)
         {
