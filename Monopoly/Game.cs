@@ -48,7 +48,7 @@ namespace Monopoly
             int nbplayers = 0;
             do
             {
-                Console.WriteLine("Please enter a number between 1 and 4 included : ");
+                Console.Write("Please enter a number between 1 and 4 included : ");
                 try
                 {
                     nbplayers = Convert.ToInt32(Console.ReadLine());
@@ -78,12 +78,16 @@ namespace Monopoly
         public void OnePlayer(List<int> Sums)
         {
             //Each player starts with 1500$
-            players.Add(new Player(1500, Tuple.Create(new Dice(), new Dice())));
-            players.Add( new Player(1500, Tuple.Create(new Dice(), new Dice()) , new Pawn("Grey")) ); //This player is the computer
+            players.Add(new Player(1500, new Dice()) );
+            players.Add( new Player(1500, new Dice() , new Pawn("Grey")) ); //This player is the computer
             int pawnused = players[0].ChoosePawn(pawnavailable);
             pawnavailable.RemoveAt(pawnused);
             foreach (Player player in players)
             {
+                if (player.Hispawn.Color == "Grey")
+                {
+                    Console.WriteLine("Computer Grey : ");
+                }
                 player.RollDice();
                 player.DisplayDiceValue();
                 Sums.Add(player.SumDice());
@@ -95,7 +99,7 @@ namespace Monopoly
             for (int i = 0; i < nbplayers; i++)
             {
                 //Each player starts with 1500$
-                players.Add(new Player(1500, Tuple.Create(new Dice(), new Dice())));
+                players.Add(new Player(1500, new Dice()));
             }
             foreach (Player player in players)
             {
@@ -114,18 +118,47 @@ namespace Monopoly
             {
                 if (p.Hispawn.Color != "Grey")
                 {
-                    Console.WriteLine("Player {0} it's your turn !", p.Hispawn.Color);
+                    Console.WriteLine("\n\t\tPlayer {0} it's your turn !", p.Hispawn.Color);
                     do
                     {
-                        Console.WriteLine("Press any key to roll dice : ");
+                        Console.WriteLine("\nPress any key to roll dice : ");
                         Console.ReadKey();
+                        Console.WriteLine();
                         p.RollDice();
                         p.DisplayDiceValue();
+                        p.GoToJail(); 
                         p.Move();
-                        Console.WriteLine("You are on {0}", board.Squares[p.Hispawn.Position].Box_name);
-                    } while ( p.Replay() );
+                        Console.WriteLine(">> You are on {0}", board.Squares[p.Hispawn.Position].Box_name);
+                        board.DispayBoard();
+                    } while ( !p.EndTurn() );
+                }
+                else
+                {
+                    Console.WriteLine("\n\t\tIt's the computer {0} turn !", p.Hispawn.Color);
+                    do
+                    {
+                        Console.WriteLine("\nRolling dice.... press any key to continue ");
+                        Console.ReadKey();
+                        Console.WriteLine();
+                        p.RollDice();
+                        p.DisplayDiceValue();
+                        p.GoToJail();
+                        p.Move();
+                        Console.WriteLine(">> Computer is on {0}", board.Squares[p.Hispawn.Position].Box_name);
+                        board.DispayBoard();
+                    } while (!p.EndTurn());
                 }
             }
+        }
+
+        public bool EndGame(int nb_turn)
+        {
+            bool end = false;
+            if (nb_turn > 5) //To simplify we impose in our rules that a game ends after the 5th turn
+            {
+                end = true;
+            }
+            return end;
         }
 
     }

@@ -10,7 +10,7 @@ namespace Monopoly
     {
         private static BoardGame instance = new BoardGame();
         private static readonly int size = 40;
-        private List<Box> squares = new List<Box>(40);
+        private List<Box> squares = new List<Box>(size);
 
         public int Size
         {
@@ -20,7 +20,6 @@ namespace Monopoly
         public List<Box> Squares
         {
             get { return squares; }
-            set { squares = value; }
         }
 
         public static BoardGame GetInstance()
@@ -30,7 +29,7 @@ namespace Monopoly
 
         private BoardGame()
         {
-            var listBoxes = new ListBox();
+            var listBoxes = new ListBox(); //use of Factory Method
             squares = listBoxes.Boxes;
         }
 
@@ -51,7 +50,7 @@ namespace Monopoly
             {
                 Console.Write("| {0} ", squares[i].Box_name);
             }
-            Console.WriteLine();
+            Console.WriteLine("\n");
         }
 
     }

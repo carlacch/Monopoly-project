@@ -11,6 +11,7 @@ namespace Monopoly
         public void Action(Player context)
         {
             Console.WriteLine("You are going to jail...");
+            context.Hispawn.Position = 10; //put player in Jail
         }
 
         public bool IsPrisoner(Player context)

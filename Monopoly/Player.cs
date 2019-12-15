@@ -17,23 +17,24 @@ namespace Monopoly
         protected int cash; // amount of money earned
         protected Pawn hispawn;
         protected List<Property> properties; // properties earned 
-        protected Tuple<Dice, Dice> twoDice; // Dice used by the player
-        protected List<Tuple<Dice, Dice>> previewsdice; //List of maximum 3 tuple of dice
+        protected Dice twoDice; // Dice used by the player
+        protected List<Dice> previewsdice; //List of maximum 3 twodice
       
-        public Player(int playing_order, int cash, Tuple<Dice, Dice> twoDice) : this(cash,twoDice)
+        public Player(int playing_order, int cash, Dice twoDice) : this(cash,twoDice)
         {
             this.playing_order = playing_order;
         }
 
-        public Player(int cash, Tuple<Dice, Dice> twoDice)
+        public Player(int cash, Dice twoDice)
         {
             this.cash = cash;
             this.twoDice = twoDice;
-            this.properties = null;
+            this.properties = new List<Property>();
             this.state = new Free();
+            this.previewsdice = new List<Dice>();
         }
 
-        public Player(int cash, Tuple<Dice, Dice> twoDice, Pawn pawn) : this(cash,twoDice)
+        public Player(int cash, Dice twoDice, Pawn pawn) : this(cash,twoDice)
         {
             this.hispawn = pawn;
         }
@@ -82,13 +83,13 @@ namespace Monopoly
             set { properties  = value; }
         }
 
-        public Tuple<Dice,Dice> TwoDice
+        public Dice TwoDice
         {
             get { return twoDice; }
             set { twoDice = value; }
         }
         
-        public List<Tuple<Dice, Dice>> Previewsdice
+        public List<Dice> Previewsdice
         {
             get { return previewsdice; }
             set { previewsdice = value; }
@@ -106,13 +107,13 @@ namespace Monopoly
 
         public int SumDice()
         {
-            int sum = this.twoDice.Item1.Dice_value + this.twoDice.Item2.Dice_value;
+            int sum = this.twoDice.Die1 + this.twoDice.Die2;
             return sum;
         }
 
         public bool DoubleDice()
         {
-            if (this.twoDice.Item1.Dice_value == this.twoDice.Item2.Dice_value)
+            if (this.twoDice.Die1 == this.twoDice.Die2)
             {
                 return true;
             }
@@ -121,10 +122,10 @@ namespace Monopoly
 
         public bool Replay()
         {
-            if (DoubleDice() && previewsdice.Count < 3 &&!IsPrisoner()) //a vérifier
+            if (DoubleDice() && !GoToJail() && !IsPrisoner()) //a vérifier
             {
                 this.previewsdice.Add(this.twoDice);
-                Console.WriteLine("You can play again !");
+                Console.WriteLine("You can play again !\n");
                 return true;
             }
             return false;
@@ -132,7 +133,7 @@ namespace Monopoly
 
         public bool GoToJail()
         {
-            if (previewsdice.Count >= 3) //If the player made 3 doubles consecutifs
+            if (previewsdice.Count > 2) //If the player made 3 doubles consecutifs
             {
                 state = new Prisoner();
                 Action();
@@ -145,7 +146,7 @@ namespace Monopoly
         {
             if (!Replay())
             {
-                this.previewsdice = null; //reset list for non-consecutive double
+                this.previewsdice = new List<Dice>(); //reset list for non-consecutive double
                 return true;
             }
             return false;
@@ -170,7 +171,7 @@ namespace Monopoly
                     Console.WriteLine("\t " + colorList.IndexOf(color) + " : " + color);
                 }
                 int nb = colorList.Count();
-                Console.WriteLine("Make your choice >>  ");
+                Console.Write("Make your choice >>  ");
                 try
                 {
                     col = Convert.ToInt32(Console.ReadLine());
@@ -184,18 +185,18 @@ namespace Monopoly
                     }
             } while (!valid);
             this.hispawn = new Pawn(colorList[col]);
+            Console.WriteLine("\nYou choose {0}", colorList[col]);
             return col;
         }
 
         public void RollDice()
         {
-            twoDice.Item1.Rolldice();
-            twoDice.Item2.Rolldice();
+            twoDice.Rolldice();
         }
 
         public void DisplayDiceValue()
         {
-            Console.WriteLine("You rolled <{0}> and <{1}> ! \nTotal of {2} ", twoDice.Item1.Dice_value, twoDice.Item2.Dice_value, SumDice());
+            Console.WriteLine("\tRolled <{0}> and <{1}> ! \n\tTotal of {2} ", twoDice.Die1, twoDice.Die2, SumDice());
         }
 
         public void Move()
