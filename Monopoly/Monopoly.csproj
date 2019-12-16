@@ -65,7 +65,6 @@
     <Compile Include="Prisoner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Property.cs" />
     <Compile Include="IStatePlayer.cs" />
     <Compile Include="StationBox.cs" />
     <Compile Include="StreetBox.cs" />
