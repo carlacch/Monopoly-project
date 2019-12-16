@@ -61,8 +61,7 @@ Participants:
 - ConcretProduct : GoBox, TaxBox, StreetBox, JailBox, GoToJailBox, ChanceBox, CommunityBox, StationBox, ParkingBox
 
 Creator :
-```
-C#
+```C#
 abstract class ListBoxFactory
     {
         private List<Box> _boxes = new List<Box>();
@@ -74,6 +73,7 @@ abstract class ListBoxFactory
         public abstract void CreateListBoxes();
     }
 ```
+ConcretCreator :
 ```C#
 class ListBox : ListBoxFactory
     {
@@ -86,6 +86,61 @@ class ListBox : ListBoxFactory
         }
     }
 ```
+Product :
+```C#
+public abstract class Box //Factory pattern
+    {
+        protected string box_name;
+        protected int box_value;
+        protected Player owner;
+
+        public Box(string box_name, int box_value)
+        {
+            this.box_name = box_name;
+            this.box_value = box_value;
+        }
+        public string Box_name
+        {
+            get { return box_name; }
+            set { box_name = value; }
+        }
+
+        public int Box_value
+        {
+            get { return box_value; }
+            set { box_value = value; }
+        }
+
+        public Player Owner
+        {
+            get { return owner; }
+            set { owner = value; }
+        }
+    }
+```
+ConcreteProduct example : 
+```C#
+class JailBox : Box
+    {
+        public new string Box_name
+        {
+            get { return this.box_name; }
+            set { this.box_name = value; }
+        }
+
+        public new int Box_value
+        {
+            get { return this.box_value; }
+            set { this.box_value = value; }
+        }
+
+        public JailBox() : base("Jail", 0)
+        {
+            this.owner = null;
+        }
+    }
+```
+
 
 ### State
 
