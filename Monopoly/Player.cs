@@ -8,36 +8,34 @@ namespace Monopoly
 {
     public class Player
     {
-        protected bool banker = false; // if it's a banker he gives the money at the beginning
+        /*
         protected bool prisoner = false; //prisoner or not
+        */
+        protected IStatePlayer state;
         protected int playing_order; // ordre dans lequel ils commencent à jouer
         protected int cash; // amount of money earned
         protected Pawn hispawn;
-        protected List<Property> properties; // properties earned 
-        protected Tuple<Dice, Dice> twoDice; // Dice used by the player
-        protected List<Tuple<Dice, Dice>> previewsdice; //List of maximum 3 tuple of dice
+        //protected List<Property> properties; // properties earned 
+        protected Dice twoDice; // Dice used by the player
+        protected List<Dice> previewsdice; //List of maximum 3 twodice
       
-        public Player(int playing_order, int cash, Tuple<Dice, Dice> twoDice)
+        public Player(int playing_order, int cash, Dice twoDice) : this(cash,twoDice)
         {
             this.playing_order = playing_order;
-            this.cash = cash;
-            this.twoDice = twoDice;
-            this.properties = null;
         }
 
-        public Player(int cash, Tuple<Dice, Dice> twoDice)
+        public Player(int cash, Dice twoDice)
         {
             this.cash = cash;
             this.twoDice = twoDice;
-            this.properties = null;
+            //this.properties = new List<Property>();
+            this.state = new Free();
+            this.previewsdice = new List<Dice>();
         }
 
-        public Player(int cash, Tuple<Dice, Dice> twoDice, Pawn pawn)
+        public Player(int cash, Dice twoDice, Pawn pawn) : this(cash,twoDice)
         {
-            this.cash = cash;
-            this.twoDice = twoDice;
             this.hispawn = pawn;
-            this.properties = null;
         }
 
         public Pawn Hispawn
@@ -46,6 +44,7 @@ namespace Monopoly
             set { hispawn = value; }
         }
 
+        /*
         public bool Banker
         {
             get { return banker; }
@@ -57,7 +56,14 @@ namespace Monopoly
             get { return prisoner; }
             set { prisoner = value; }
         }
-        
+        */
+
+        public IStatePlayer State
+        {
+            get { return state; }
+            set { state = value; }
+        }
+
         public int Playing_Order
         {
             get { return playing_order; }
@@ -69,45 +75,56 @@ namespace Monopoly
             get { return cash; }
             set { cash = value; }
         }
-
+        /*
         public List<Property> Properties
         {
             get { return properties; }
             set { properties  = value; }
         }
-
-        public Tuple<Dice,Dice> TwoDice
+        */
+        public Dice TwoDice
         {
             get { return twoDice; }
             set { twoDice = value; }
         }
         
-        public List<Tuple<Dice, Dice>> Previewsdice
+        public List<Dice> Previewsdice
         {
             get { return previewsdice; }
             set { previewsdice = value; }
         }
 
+        public void Action()
+        {
+            state.Action(this);
+        }
+
+        public bool IsPrisoner()
+        {
+            return state.IsPrisoner(this);
+        }
+
         public int SumDice()
         {
-            int sum = this.twoDice.Item1.Dice_value + this.twoDice.Item2.Dice_value;
+            int sum = this.twoDice.Die1 + this.twoDice.Die2;
             return sum;
         }
 
         public bool DoubleDice()
         {
-            if (this.twoDice.Item1.Dice_value == this.twoDice.Item2.Dice_value)
+            if (this.twoDice.Die1 == this.twoDice.Die2)
             {
                 return true;
             }
             return false;
         }
 
-        public bool Replay()
+        public bool Replay() // if true the player plays again
         {
-            if (DoubleDice()) 
+            if (DoubleDice() && !GoToJail() && !IsPrisoner()) 
             {
                 this.previewsdice.Add(this.twoDice);
+                Console.WriteLine("You can play again !\n");
                 return true;
             }
             return false;
@@ -115,9 +132,10 @@ namespace Monopoly
 
         public bool GoToJail()
         {
-            if (previewsdice.Count >= 3) //If the player made 3 doubles consecutifs
+            if (previewsdice.Count > 2) //If the player made 3 doubles in a row
             {
-                prisoner = true;
+                state = new Prisoner();
+                Action();
                 return true;
             }
             return false;
@@ -127,15 +145,17 @@ namespace Monopoly
         {
             if (!Replay())
             {
-                this.previewsdice = null; //reset list for non-consecutive double
+                this.previewsdice = new List<Dice>(); //reset list for non-consecutive double
                 return true;
             }
             return false;
         }
 
-        public void PickCard()
+        public void PickCard(Queue<Card> deck_cards)
         {
-            Console.WriteLine("Here is the card you picked : ");
+            Card card = deck_cards.Dequeue(); //take the first card of the deck
+            Console.WriteLine("Here is the card you picked : \n\" {0} \"", card.Description );
+            deck_cards.Enqueue(card); //put back the card at the bottom of the deck
         }
 
         public int ChoosePawn(List<String> colorList)
@@ -152,12 +172,12 @@ namespace Monopoly
                     Console.WriteLine("\t " + colorList.IndexOf(color) + " : " + color);
                 }
                 int nb = colorList.Count();
-                Console.WriteLine("Make your choice >>  ");
+                Console.Write("Make your choice >>  ");
                 try
                 {
                     col = Convert.ToInt32(Console.ReadLine());
                 }
-                catch (FormatException e) 
+                catch (FormatException) 
                 { }
                 if ( col >= nb || col < 0)
                     {
@@ -166,13 +186,75 @@ namespace Monopoly
                     }
             } while (!valid);
             this.hispawn = new Pawn(colorList[col]);
+            Console.WriteLine("\nYou choose {0}", colorList[col]);
             return col;
         }
 
         public void RollDice()
         {
-            twoDice.Item1.Rolldice();
-            twoDice.Item2.Rolldice();
+            twoDice.Rolldice();
+        }
+
+        public void DisplayDiceValue()
+        {
+            Console.WriteLine("\tRolled <{0}> and <{1}> ! \n\tTotal of {2} ", twoDice.Die1, twoDice.Die2, SumDice());
+        }
+
+        public void Move()
+        {
+            if (IsPrisoner())
+            {
+                Console.WriteLine("You can't move, you are in jail");
+            }
+            else
+            {
+                hispawn.Position = (hispawn.Position + SumDice() )% 40;
+            }
+        }
+
+        public void BuyLand(Box land)
+        {
+            Console.WriteLine("Do you want to buy this {0} ? It costs {1}$", land.Box_name, Math.Abs(land.Box_value));
+            Console.WriteLine("\n1/ YES \n2/ NO");
+            int input = int.Parse(Console.ReadLine());
+            switch (input)
+            {
+                case 1:
+                    if (cash >= Math.Abs(land.Box_value))
+                    {
+                        cash += land.Box_value;
+                        land.Owner = this;
+                        Console.WriteLine(" This {0} has been added to your proprieties", land.Box_name);
+                    }
+                    else
+                    {
+                        Console.WriteLine("You can't buy this property.");
+                    }
+                    break;
+                case 2:
+                    Console.WriteLine("You chose to not buy this property");
+                    break;
+                default:
+                    Console.WriteLine("\ninvalid choice => choose again....");
+                    break;
+            }
+        }
+
+        public void NoMoreCash()
+        {
+            this.cash = 0;
+            Console.WriteLine("\nYou don't have any money left....\n\tYou lost");
+        }
+
+        public void PayingOwner(Box land)
+        {
+            Console.WriteLine("You are on the land of {0}... You need to pay him {1}$", land.Owner.Hispawn.Color, Math.Abs(land.Box_value));
+            if (this.cash <= Math.Abs(land.Box_value))
+            {
+                NoMoreCash();
+            }
+            else { this.cash += land.Box_value; }
+            land.Owner.Cash += Math.Abs(land.Box_value);
         }
     }
 }

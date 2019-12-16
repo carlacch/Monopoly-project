@@ -20,7 +20,13 @@ namespace Monopoly
             set { this.box_value = value; }
         }
 
-        public StationBox(string box_name, int box_value) : base(box_name, box_value)
+        public new Player Owner
+        {
+            get { return owner; }
+            set { owner = value; }
+        }
+
+        public StationBox() : base("Station", -100)
         {
         }
     }

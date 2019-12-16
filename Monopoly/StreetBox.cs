@@ -8,6 +8,8 @@ namespace Monopoly
 {
     class StreetBox : Box
     {
+        // all street value is 150
+
         public new string Box_name
         {
             get { return this.box_name; }
@@ -20,9 +22,14 @@ namespace Monopoly
             set { this.box_value = value; }
         }
 
-        public StreetBox(string box_name, int box_value) : base(box_name, box_value)
+        public new Player Owner
         {
+            get { return owner; }
+            set { owner = value; }
+        }
 
+        public StreetBox(string box_name) : base("Street " + box_name, 150 )
+        {
         }
     }
 }

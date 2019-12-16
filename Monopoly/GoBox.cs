@@ -8,7 +8,7 @@ namespace Monopoly
 {
     class GoBox : Box
     {
-        // value of all parking : 0
+        
         // action : depart des pawn au lancement
 
         public new string Box_name
@@ -23,8 +23,9 @@ namespace Monopoly
             set { this.box_value = value; }
         }
 
-        public GoBox(string box_name, int box_value) : base(box_name, box_value)
+        public GoBox() : base("Go", 200)
         {
+            this.owner = null; //Cannot be owned
         }
 
     }

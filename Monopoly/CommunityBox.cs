@@ -20,8 +20,9 @@ namespace Monopoly
             set { base.box_value = value; }
         }
 
-        public CommunityBox(string box_name, int box_value) : base(box_name, box_value)
+        public CommunityBox() : base("Community", 0)
         {
+            this.owner = null; //Cannot be owned
         }
     }
 }

@@ -20,8 +20,9 @@ namespace Monopoly
             set { this.box_value = value; }
         }
 
-        public JailBox(string box_name, int box_value) : base(box_name, box_value)
+        public JailBox() : base("Jail", 0)
         {
+            this.owner = null; //Cannot be owned
         }
     }
 }

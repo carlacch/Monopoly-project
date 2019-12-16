@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-   
+   /*
     enum Type
     {
         go, //1
@@ -18,12 +18,13 @@ namespace Monopoly
         tax, //4
         jail, //1
         go_to_jail, //1
-    }
+    }*/
 
-    abstract class Box //Factory pattern
+    public abstract class Box //Factory pattern
     {
         protected string box_name;
         protected int box_value; // for parking, station and tax not null, null for all others
+        protected Player owner;
 
         public Box(string box_name, int box_value)
         {
@@ -43,7 +44,11 @@ namespace Monopoly
             set { box_value = value; }
         }
 
-        
+        public Player Owner
+        {
+            get { return owner; }
+            set { owner = value; }
+        }
 
     }
 }

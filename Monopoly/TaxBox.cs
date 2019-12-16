@@ -23,8 +23,9 @@ namespace Monopoly
             set { base.box_value = value; }
         }
 
-        public TaxBox(string box_name, int box_value) : base(box_name, box_value)
+        public TaxBox() : base("Tax", -40)
         {
+            this.owner = null; //Cannot be owned
         }
     }
 }

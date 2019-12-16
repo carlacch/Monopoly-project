@@ -10,7 +10,7 @@ namespace Monopoly
     {
         private static BoardGame instance = new BoardGame();
         private static readonly int size = 40;
-        private List<Box> squares = new List<Box>(40);
+        private List<Box> squares = new List<Box>(size);
 
         public int Size
         {
@@ -20,7 +20,6 @@ namespace Monopoly
         public List<Box> Squares
         {
             get { return squares; }
-            set { squares = value; }
         }
 
         public static BoardGame GetInstance()
@@ -30,22 +29,28 @@ namespace Monopoly
 
         private BoardGame()
         {
-            buildSquares();
+            var listBoxes = new ListBox(); //use of Factory Method
+            squares = listBoxes.Boxes;
         }
 
-        private void buildSquares()
+        public void DispayBoard()
         {
-            for (int i = 1; i <= size; i++)
-            {
-                build(i);
+            Console.WriteLine();
+            for (int i=0; i <= 10; i++)
+            { 
+                Console.Write("| {0} ", squares[i].Box_name);
             }
-        }
-
-        private void build(int i)
-        {
-            //FAIRE CREATION DES CASES AVEC FACTORY 
-            //Box s = new Box("Box " + i, i - 1);
-            //squares.add(s);
+            Console.WriteLine("\n-----------------------------------------------------------------------------------------");
+            for (int i = 0; i <= 8; i++)
+            {
+                Console.WriteLine("| {0} \t|\t\t\t\t\t\t\t\t\t\t | {1} \t|", squares[39-i].Box_name, squares[11+i].Box_name);
+            }
+            Console.WriteLine("\n-----------------------------------------------------------------------------------------");
+            for (int i = 30; i >= 20; i--)
+            {
+                Console.Write("| {0} ", squares[i].Box_name);
+            }
+            Console.WriteLine("\n");
         }
 
     }
