@@ -52,7 +52,40 @@ The BoardGame() constructor is private so it can be instanciate only in the Boar
 
 ![UMLfactoty](https://www.dofactory.com/images/diagrams/net/factory.gif)
 
-Here .....
+Here //TO FINISH//
+
+Participants:
+- Creator : ListBoxFactory
+- ConcretCreator : ListBox
+- Product : Box
+- ConcretProduct : GoBox, TaxBox, StreetBox, JailBox, GoToJailBox, ChanceBox, CommunityBox, StationBox, ParkingBox
+
+Creator :
+```
+C#
+abstract class ListBoxFactory
+    {
+        private List<Box> _boxes = new List<Box>();
+
+        public ListBoxFactory()
+        {
+            CreateListBoxes();
+        }
+        public abstract void CreateListBoxes();
+    }
+```
+```C#
+class ListBox : ListBoxFactory
+    {
+        public override void CreateListBoxes()
+        {
+            Boxes.Add(new GoBox());             //1
+            Boxes.Add(new StreetBox("1"));      //2
+            ....
+            Boxes.Add(new StreetBox("22"));     //40
+        }
+    }
+```
 
 ### State
 
