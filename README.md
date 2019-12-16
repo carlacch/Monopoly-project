@@ -44,7 +44,7 @@ public class BoardGame
     }
 ```
 
-The BoardGame() constructor is private so it can be instanciate only in the BoardGame class. With .NET static members are initialized immediately when the class is loaded for the first time so ```private static BoardGame instance = new BoardGame();``` guarantees thread safety.
+The BoardGame() constructor is private so it can be instanciate only in the BoardGame class. With .NET static members are initialized immediately when the class is loaded for the first time so ```private static BoardGame instance = new BoardGame()``` guarantees thread safety.
 
 ### Factory Method
 
@@ -54,7 +54,7 @@ The BoardGame() constructor is private so it can be instanciate only in the Boar
 
 Here //TO FINISH//
 
-Participants:
+**Participants:**
 - Creator : ListBoxFactory
 - ConcretCreator : ListBox
 - Product : Box
@@ -150,7 +150,90 @@ class JailBox : Box
 
 Here a **player** can be either a **prisoner** or **free**, these are two state he can be in. So it is relevent to create an interface *IStatePlayer* that will associate the behavior of a Player.
 
-//TO FINISH//
+**Participants :**
+- Context : Player
+- State : IStatePlayer
+- ConcreteState : Prisoner , Free
+
+Context :
+```C#
+public class Player
+    {
+        protected IStatePlayer state;
+        ...
+      
+        public Player(int cash, Dice twoDice)
+        {
+            this.cash = cash;
+            this.twoDice = twoDice;
+            this.state = new Free();
+            this.previewsdice = new List<Dice>();
+        }
+        ....
+        public IStatePlayer State
+        {
+            get { return state; }
+            set { state = value; }
+        }
+
+        public void Action()
+        {
+            state.Action(this);
+        }
+
+        public bool IsPrisoner()
+        {
+            return state.IsPrisoner(this);
+        }
+
+        public void GoToJail()
+        {
+            state = new Prisoner();
+            Action();
+        }
+        ....
+    }
+```
+State : 
+```C#
+public interface IStatePlayer
+    {
+        void Action(Player context);
+        bool IsPrisoner(Player context);
+    }
+```
+ConcreteState Prisoner :
+```C#
+class Prisoner : IStatePlayer
+    {
+        public void Action(Player context)
+        {
+            Console.WriteLine("You are going to jail...");
+            context.Hispawn.Position = 10; //put player in Jail
+        }
+
+        public bool IsPrisoner(Player context)
+        {
+            return true;
+        }
+    }
+```
+ConcreteState Free :
+```C#
+class Free : IStatePlayer
+    {
+        public void Action(Player context)
+        {
+            Console.WriteLine("You are now free and can move again ! ");
+        }
+
+        public bool IsPrisoner(Player context)
+        {
+            return false;
+        }
+    }
+```
+With this, when a Player lands on "Go To Jail" his state is set to Prisoner ```state = new Prisoner()``` and then is going to Jail by calling the method ```Action()```.
 
 ## Conclusion
 
