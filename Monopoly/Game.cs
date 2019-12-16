@@ -9,7 +9,8 @@ namespace Monopoly
     class Game
     {
         BoardGame board;
-        List<Card> cards;
+        Queue<Card> chance_cards;
+        Queue<Card> comm_cards;
         List<Player> players;
         List<String> pawnavailable;
 
@@ -17,7 +18,8 @@ namespace Monopoly
         {
             board = BoardGame.GetInstance();
             players = new List<Player>();
-            cards = new List<Card>();
+            chance_cards = CreateChance();
+            comm_cards = CreateCommunity();
             String[] colorlist = { "Red", "Yellow", "Green", "Blue", "Black", "White", "Purple" };
             pawnavailable = new List<String>(colorlist);
         }
@@ -25,6 +27,47 @@ namespace Monopoly
         public BoardGame Board
         {
             get { return board; }
+        }
+
+        public Queue<Card> CreateChance() //La création des cartes n'est pas encore faite de manière dynamique 
+        {
+            Card chance1 = new Chance(1, "You receive 100$");
+            Card chance2 = new Chance(2, "Continue until the Go box");
+            Card chance3 = new Chance(3, "Go to jail");
+            Card chance4 = new Chance(4, "You receive 30$");
+            Card chance5 = new Chance(5, "You are free from jail");
+            Card chance6 = new Chance(6, "Move 7 boxes ahead");
+            
+            // creation of chance deck
+            Queue<Card> deck_chance = new Queue<Card>();
+            deck_chance.Enqueue(chance6); // LAST CARD OF THE DECK
+            deck_chance.Enqueue(chance5);
+            deck_chance.Enqueue(chance4);
+            deck_chance.Enqueue(chance3);
+            deck_chance.Enqueue(chance2);
+            deck_chance.Enqueue(chance1); // IS ON THE TOP OF THE DECK
+
+            return deck_chance;
+        }
+
+        public Queue<Card> CreateCommunity()
+        {
+            Card community1 = new Community(1, "You receive 100$");
+            Card community2 = new Community(2, "You lose 10$");
+            Card community3 = new Community(3, "You reveive 40$");
+            Card community4 = new Community(4, "You go to jail");
+            Card community5 = new Community(5, "You receive 300$");
+            Card community6 = new Community(6, "You receive 1$");
+            // community stack
+            Queue<Card> deck_community = new Queue<Card>();
+            deck_community.Enqueue(community6);
+            deck_community.Enqueue(community5);
+            deck_community.Enqueue(community4);
+            deck_community.Enqueue(community3);
+            deck_community.Enqueue(community2);
+            deck_community.Enqueue(community1);
+
+            return deck_community;
         }
 
         public void PlayingOrder(List<int> Sums)
@@ -251,13 +294,13 @@ namespace Monopoly
             else if (box.Box_name == "Community")
             {
                 Console.WriteLine("Pick one community card");
-                /// to do
+                player.PickCard(comm_cards);
             }
 
             else if (box.Box_name == "Chance")
             {
                 Console.WriteLine("Pick one chance card");
-                /// to do
+                player.PickCard(chance_cards);
             }                  
 
         }

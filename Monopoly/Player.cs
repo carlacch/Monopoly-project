@@ -119,9 +119,9 @@ namespace Monopoly
             return false;
         }
 
-        public bool Replay()
+        public bool Replay() // if true the player plays again
         {
-            if (DoubleDice() && !GoToJail() && !IsPrisoner()) //a vérifier
+            if (DoubleDice() && !GoToJail() && !IsPrisoner()) 
             {
                 this.previewsdice.Add(this.twoDice);
                 Console.WriteLine("You can play again !\n");
@@ -132,7 +132,7 @@ namespace Monopoly
 
         public bool GoToJail()
         {
-            if (previewsdice.Count > 2) //If the player made 3 doubles consecutifs
+            if (previewsdice.Count > 2) //If the player made 3 doubles in a row
             {
                 state = new Prisoner();
                 Action();
@@ -151,9 +151,11 @@ namespace Monopoly
             return false;
         }
 
-        public void PickCard()
+        public void PickCard(Queue<Card> deck_cards)
         {
-            Console.WriteLine("Here is the card you picked : ");
+            Card card = deck_cards.Dequeue(); //take the first card of the deck
+            Console.WriteLine("Here is the card you picked : \n\" {0} \"", card.Description );
+            deck_cards.Enqueue(card); //put back the card at the bottom of the deck
         }
 
         public int ChoosePawn(List<String> colorList)

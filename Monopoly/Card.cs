@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-    class Card
+    public abstract class Card
     {
         protected int id_card;
         protected String description;
