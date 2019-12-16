@@ -67,7 +67,7 @@ For that we have the gang of 4 :
 - ConcretCreator : ListBox
 - Product : Box
 - ConcretProduct : GoBox, TaxBox, StreetBox, JailBox, GoToJailBox, ChanceBox, CommunityBox, StationBox, ParkingBox
-- 
+
 
 Creator :
 ```C#
