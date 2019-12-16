@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-    class BoardGame
+    public class BoardGame
     {
         private static BoardGame instance = new BoardGame();
         private static readonly int size = 40;
@@ -40,12 +40,12 @@ namespace Monopoly
             { 
                 Console.Write("| {0} ", squares[i].Box_name);
             }
-            Console.WriteLine("\n-----------------------------------------------------------------------------------------");
+            Console.Write("\n-------------------------------------------------------------------------------------------------");
             for (int i = 0; i <= 8; i++)
             {
-                Console.WriteLine("| {0} \t|\t\t\t\t\t\t\t\t\t\t | {1} \t|", squares[39-i].Box_name, squares[11+i].Box_name);
+                Console.Write("\n| {0} \t|\t\t\t\t\t\t\t\t\t\t | {1} \t|", squares[39-i].Box_name, squares[11+i].Box_name);
             }
-            Console.WriteLine("\n-----------------------------------------------------------------------------------------");
+            Console.WriteLine("\n-------------------------------------------------------------------------------------------------");
             for (int i = 30; i >= 20; i--)
             {
                 Console.Write("| {0} ", squares[i].Box_name);

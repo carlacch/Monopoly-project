@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-    class Game
+    public class Game
     {
         BoardGame board;
         Queue<Card> chance_cards;
@@ -35,7 +35,7 @@ namespace Monopoly
             Card chance2 = new Chance(2, "Continue until the Go box");
             Card chance3 = new Chance(3, "Go to jail");
             Card chance4 = new Chance(4, "You receive 30$");
-            Card chance5 = new Chance(5, "You are free from jail");
+            Card chance5 = new Chance(5, "Move 1 box ahead");
             Card chance6 = new Chance(6, "Move 7 boxes ahead");
             
             // creation of chance deck
@@ -53,11 +53,11 @@ namespace Monopoly
         public Queue<Card> CreateCommunity()
         {
             Card community1 = new Community(1, "You receive 100$");
-            Card community2 = new Community(2, "You lose 10$");
+            Card community2 = new Community(2, "You lose 100$");
             Card community3 = new Community(3, "You reveive 40$");
             Card community4 = new Community(4, "You go to jail");
             Card community5 = new Community(5, "You receive 300$");
-            Card community6 = new Community(6, "You receive 1$");
+            Card community6 = new Community(6, "Move 2 boxes ahead");
             // community stack
             Queue<Card> deck_community = new Queue<Card>();
             deck_community.Enqueue(community6);
@@ -91,19 +91,20 @@ namespace Monopoly
             int nbplayers = 0;
             do
             {
-                Console.Write("Please enter a number between 1 and 4 included : ");
+                Console.Write("Please enter a number between 2 and 4 included : ");
+                //Console.Write("Please enter a number between 1 and 4 included : "); //Playing with COMPUTER isn't done yet
                 try
                 {
                     nbplayers = Convert.ToInt32(Console.ReadLine());
                 }
                 catch (FormatException) { }
-                if (nbplayers <= 0 || nbplayers > 4)
+                if (nbplayers <= 1 || nbplayers > 4)
                 {
                     valid = false;
                     Console.WriteLine("Your choice isn't valid, try again !\n");
                 }
             } while (!valid);
-            if (nbplayers == 1)
+            if (nbplayers == 1) //NOT OVER YET
             {
                 OnePlayer(Sums);
             }
@@ -159,22 +160,34 @@ namespace Monopoly
         {
             foreach (Player p in players)
             {
+                /*
                 if (p.Hispawn.Color != "Grey")
+                {*/
+                Console.WriteLine("\n\t\tPlayer {0} it's your turn !", p.Hispawn.Color);
+                Console.WriteLine("\t\tYou have {0}$", p.Cash);
+                do
                 {
-                    Console.WriteLine("\n\t\tPlayer {0} it's your turn !", p.Hispawn.Color);
-                    do
-                    {
-                        Console.WriteLine("\nPress any key to roll dice : ");
-                        Console.ReadKey();
-                        Console.WriteLine();
-                        p.RollDice();
-                        p.DisplayDiceValue();
-                        p.GoToJail();
-                        p.Move();
-                        Console.WriteLine(">> You are on {0}", board.Squares[p.Hispawn.Position].Box_name);
-                        board.DispayBoard();
-                    } while (!p.EndTurn());
+                    Console.WriteLine("\nPress any key to roll dice : ");
+                    Console.ReadKey();
+                    Console.WriteLine();
+                    p.RollDice();
+                    p.DisplayDiceValue();
+                    p.GoingToJail();
+                    p.Move();
+                    Console.WriteLine(">> You are on {0}", board.Squares[p.Hispawn.Position].Box_name);
+                    board.DispayBoard();
+                    ActionPlayer(p);
+                } while (!p.EndTurn());
+                if (p.IsPrisoner())
+                {
+                    p.TurninJail += 1; 
                 }
+                else
+                {
+                    p.TurninJail = 0;
+                }
+                //}
+                /*  COMPUTER ISN'T DONE YET
                 else
                 {
                     Console.WriteLine("\n\t\tIt's the computer {0} turn !", p.Hispawn.Color);
@@ -189,17 +202,30 @@ namespace Monopoly
                         p.Move();
                         Console.WriteLine(">> Computer is on {0}", board.Squares[p.Hispawn.Position].Box_name);
                         board.DispayBoard();
+                        ActionPlayer(p);
                     } while (!p.EndTurn());
+                }*/
+                if (p.Lost)
+                {
+                    Console.WriteLine("Player {0} lost...", p.Hispawn.Color);
+                    players.Remove(p);
                 }
             }
         }
 
-        public bool EndGame(int nb_turn)
+        public bool EndGame(int nb_turn, int max_turn)
         {
             bool end = false;
-            if (nb_turn > 5) //To simplify we impose in our rules that a game ends after the 5th turn
+            if (nb_turn > max_turn) //To simplify we impose in our rules that a game ends after a number of turns
             {
                 end = true;
+                Console.WriteLine("\t\tTHE GAME IS OVER ");
+            }
+            if (players.Count <= 1)
+            {
+                end = true;
+                Console.WriteLine("\t\tTHE GAME IS OVER ");
+                Console.WriteLine("Player {0} won with a total of {1}$", players[0].Hispawn.Color, players[0].Cash);
             }
             return end;
         }
@@ -208,26 +234,26 @@ namespace Monopoly
         {
             int position = player.Hispawn.Position;
             Box box = board.Squares[position];
-            if (box.Box_name == "Go")  // in case jail
+            if (box.Box_name == "Go" || player.MadeATurn() && !player.IsPrisoner())  
             {
-                player.Cash += box.Box_value;
-                Console.WriteLine("You earned {0}$ because you're starting the game or going through the go case :)", box.Box_value);
+                player.Cash += board.Squares[0].Box_value;
+                Console.WriteLine("You earned {0}$ because you're starting the game or going through the go case :)", board.Squares[0].Box_value);
+                Console.WriteLine("You now have {0}$", player.Cash);
             }
-            else if (box.Box_name == "Tax")
+            if (box.Box_name == "Tax")
             {
                 Console.WriteLine("You lose {0}$ because of a tax :( ", Math.Abs(box.Box_value));
                 if (player.Cash > Math.Abs(box.Box_value))
                 {
                     player.Cash += box.Box_value;
-                    
+                    Console.WriteLine("You now have {0}$", player.Cash);
                 }
                 else
                 {
                     player.NoMoreCash();
                 }
             }
-
-            else if (box.Box_name == "Station")
+            if (box.Box_name == "Station")
             {
                 if (box.Owner == null)
                 {
@@ -242,7 +268,7 @@ namespace Monopoly
                     else { Console.WriteLine("This is your propriety !"); }
                 }
             }
-            else if (box.Box_name == "Parking")
+            if (box.Box_name == "Parking")
             {
                 if (box.Owner == null)
                 {
@@ -257,7 +283,7 @@ namespace Monopoly
                     else { Console.WriteLine("This is your propriety !"); }
                 }
             }
-            else if (box.Box_name.Contains("Street"))
+            if (box.Box_name.Contains("Street"))
             {
                 if (box.Owner == null)
                 {
@@ -272,35 +298,35 @@ namespace Monopoly
                     else { Console.WriteLine("This is your propriety !"); }
                 }
             }
-            else if (box.Box_name == "Jail")
+            if (box.Box_name == "Jail")
             {
                 Console.WriteLine("You're on the jail case");
                 if (player.IsPrisoner())
                 {
                     Console.WriteLine("You're behind bars..");
+
                 }
                 else
                 {
                     Console.WriteLine("You're visiting a friend");
                 }
-            }
-
-            else if (box.Box_name == "Go To Jail")
+            } 
+            if (box.Box_name == "Go To Jail")
             {
                 player.GoToJail();
                 Console.WriteLine("You skip the next 3 turns");                
             }
-
-            else if (box.Box_name == "Community")
+            if (box.Box_name == "Community")
             {
-                Console.WriteLine("Pick one community card");
-                player.PickCard(comm_cards);
+                Console.WriteLine("Press any key to pick one community card");
+                Console.ReadKey();
+                player.PickCard(comm_cards,this);
             }
-
-            else if (box.Box_name == "Chance")
+            if (box.Box_name == "Chance")
             {
-                Console.WriteLine("Pick one chance card");
-                player.PickCard(chance_cards);
+                Console.WriteLine("Press any key to pick one chance card");
+                Console.ReadKey();
+                player.PickCard(chance_cards,this);
             }                  
 
         }
