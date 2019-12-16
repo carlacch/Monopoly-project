@@ -28,5 +28,7 @@ namespace Monopoly
             get { return description; }
             set { description = value; }
         }
+
+        public abstract void ActionCard(Player p, Game game);
     }
 }

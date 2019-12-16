@@ -11,10 +11,12 @@ namespace Monopoly
         /*
         protected bool prisoner = false; //prisoner or not
         */
+        protected bool lost = false;
         protected IStatePlayer state;
         protected int playing_order; // ordre dans lequel ils commencent à jouer
         protected int cash; // amount of money earned
         protected Pawn hispawn;
+        protected int turninJail = 0;
         //protected List<Property> properties; // properties earned 
         protected Dice twoDice; // Dice used by the player
         protected List<Dice> previewsdice; //List of maximum 3 twodice
@@ -57,6 +59,11 @@ namespace Monopoly
             set { prisoner = value; }
         }
         */
+        public bool Lost
+        {
+            get { return lost; }
+            set { lost = value; }
+        }
 
         public IStatePlayer State
         {
@@ -82,6 +89,12 @@ namespace Monopoly
             set { properties  = value; }
         }
         */
+        public int TurninJail
+        {
+            get { return turninJail; }
+            set { turninJail = value; }
+        }
+
         public Dice TwoDice
         {
             get { return twoDice; }
@@ -121,7 +134,7 @@ namespace Monopoly
 
         public bool Replay() // if true the player plays again
         {
-            if (DoubleDice() && !GoToJail() && !IsPrisoner()) 
+            if (DoubleDice() && !GoingToJail() && !IsPrisoner()) 
             {
                 this.previewsdice.Add(this.twoDice);
                 Console.WriteLine("You can play again !\n");
@@ -130,12 +143,17 @@ namespace Monopoly
             return false;
         }
 
-        public bool GoToJail()
+        public void GoToJail()
         {
-            if (previewsdice.Count > 2) //If the player made 3 doubles in a row
+            state = new Prisoner();
+            Action();
+        }
+
+        public bool GoingToJail()
+        {
+            if (previewsdice.Count > 2 ) //If the player made 3 doubles in a row
             {
-                state = new Prisoner();
-                Action();
+                GoToJail();
                 return true;
             }
             return false;
@@ -148,13 +166,22 @@ namespace Monopoly
                 this.previewsdice = new List<Dice>(); //reset list for non-consecutive double
                 return true;
             }
+            if (lost)
+            {
+                return true;
+            }
+            if (turninJail > 0)
+            {
+                return true;
+            }
             return false;
         }
 
-        public void PickCard(Queue<Card> deck_cards)
+        public void PickCard(Queue<Card> deck_cards,Game game)
         {
             Card card = deck_cards.Dequeue(); //take the first card of the deck
             Console.WriteLine("Here is the card you picked : \n\" {0} \"", card.Description );
+            card.ActionCard(this,game); //do what says on the card
             deck_cards.Enqueue(card); //put back the card at the bottom of the deck
         }
 
@@ -200,11 +227,36 @@ namespace Monopoly
             Console.WriteLine("\tRolled <{0}> and <{1}> ! \n\tTotal of {2} ", twoDice.Die1, twoDice.Die2, SumDice());
         }
 
+        public bool MadeATurn()
+        {
+            if (hispawn.Position - SumDice() < 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public void Move()
         {
             if (IsPrisoner())
             {
-                Console.WriteLine("You can't move, you are in jail");
+                if (DoubleDice())
+                {
+                    Console.WriteLine("You made a double !");
+                    state = new Free();
+                    Action();
+                    Move();
+                }
+                else if (turninJail > 2)
+                {
+                    Console.WriteLine("You spent 3 turns in jail. You made your time.");
+                    state = new Free();
+                    Action();
+                    Move();
+                }
+                else {
+                    Console.WriteLine("You can't move, you are in jail"); 
+                }
             }
             else
             {
@@ -224,6 +276,7 @@ namespace Monopoly
                     {
                         cash += land.Box_value;
                         land.Owner = this;
+                        Console.WriteLine(" You now have {0}$", cash);
                         Console.WriteLine(" This {0} has been added to your proprieties", land.Box_name);
                     }
                     else
@@ -243,7 +296,8 @@ namespace Monopoly
         public void NoMoreCash()
         {
             this.cash = 0;
-            Console.WriteLine("\nYou don't have any money left....\n\tYou lost");
+            Console.WriteLine("\nYou don't have any money left....");
+            lost = true;
         }
 
         public void PayingOwner(Box land)
@@ -254,7 +308,9 @@ namespace Monopoly
                 NoMoreCash();
             }
             else { this.cash += land.Box_value; }
+            Console.WriteLine("You now have {0}$", cash);
             land.Owner.Cash += Math.Abs(land.Box_value);
+            Console.WriteLine("And player {0} now have {1}$", land.Owner.Hispawn.Color ,land.Owner.Cash);
         }
     }
 }

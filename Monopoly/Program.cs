@@ -19,7 +19,7 @@ namespace Monopoly
             {
                 turn += 1;
                 MonopolyGame.ATurn();
-            } while (!MonopolyGame.EndGame(turn));
+            } while (!MonopolyGame.EndGame(turn,10));
             Console.ReadKey();
         }
     }

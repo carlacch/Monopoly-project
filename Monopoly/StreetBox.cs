@@ -28,7 +28,7 @@ namespace Monopoly
             set { owner = value; }
         }
 
-        public StreetBox(string box_name) : base("Street " + box_name, 150 )
+        public StreetBox(string box_name) : base("Street " + box_name, -150 )
         {
         }
     }
