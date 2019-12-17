@@ -52,9 +52,9 @@ The BoardGame() constructor is private so it can be instanciate only in the Boar
 
 ![UMLfactoty](https://www.dofactory.com/images/diagrams/net/factory.gif)
 
-We chose this pattern for the creation of the boxes beacause it's an appropriate way to create them. 
-Factory Pattern defines an interface to create an object (here the boxes) but let the classes that implement the interface decide which class to instanciate.
-Indeed, we want to create the boxes to play at Monopoly but we don't need to know thoses boxes had been created (it's not necessary)
+We chose this pattern for the creation of the boxes because it's an appropriate way to create them. 
+Factory Pattern defines an interface to create an object - here the boxes - but let the classes that implement the interface decide which class to instanciate.
+Indeed, we want to create the boxes to play at Monopoly but we don't need to know thoses boxes had been created - since it's not necessary.
 
 For that we have the gang of 4 : 
 - the creator which is an abstract class that calls CreateListBoxes that creates the boxes but don't write the details of it
@@ -246,7 +246,7 @@ With this, when a Player lands on "Go To Jail" his state is set to Prisoner ```s
 
 ## Conclusion
 
-We tried to code this simplified version of Monopoly using the more approriate patterns of us. Because we were limited in time we didn't code the entire Monopoly game and didn't yet automatized the game to be able to play with the computer. However I hope you appreciate our effort. I know that our UI is **very** claqué au sol because on the console but at least it works. 🙂
+We tried to code this simplified version of Monopoly using the more approriate patterns for us. Because we were limited in time we didn't code the entire Monopoly game and didn't yet automatized the game to be able to play with the computer. However I hope you appreciate our effort. I know that our UI is **very** claqué au sol because on the console but at least it works. 🙂
 
 #### Made by :
   * Carla CAUCHE
