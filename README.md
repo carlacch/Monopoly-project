@@ -246,7 +246,7 @@ With this, when a Player lands on "Go To Jail" his state is set to Prisoner ```s
 
 ## Conclusion
 
-We tried to code this simplified version of Monopoly using the more approriate patterns for us. Because we were limited in time we didn't code the entire Monopoly game and didn't yet automatized the game to be able to play with the computer. However I hope you appreciate our effort. I know that our UI is **very** claqué au sol because on the console but at least it works. 🙂
+We tried to code this simplified version of Monopoly using the more approriate patterns for us. Because we were limited in time we didn't code the entire Monopoly game and didn't yet automatized the game to be able to play with the computer. However I hope you appreciate our effort. 🙂
 
 #### Made by :
   * Carla CAUCHE
